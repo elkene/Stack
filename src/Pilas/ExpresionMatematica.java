@@ -10,7 +10,10 @@ public class ExpresionMatematica {
 
         // Recorremos la expresión caracter por caracter
         for (int i = 0; i < expresion.length(); i++) {
-            char caracter = expresion.charAt(i);
+            char caracter = expresion.charAt(i);//Devuelve el valor del carácter en el índice especificado. 
+            //Un índice varía de 0 a longitud() - 1. 
+            //El primer valor de carácter de la secuencia está 
+            //en el índice 0, el siguiente en el índice 1, y así sucesivamente, como para la indexación de matrices.
 
             // Si el caracter es un símbolo de apertura, lo agregamos a la pila
             if (caracter == '(' || caracter == '{' || caracter == '[') {
