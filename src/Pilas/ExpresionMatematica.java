@@ -4,90 +4,66 @@ import java.util.Stack;
 
 public class ExpresionMatematica {
 
-    // Método para verificar si una expresión está balanceada
+    // Método para verificar si una expresión está balanceada (paréntesis, llaves, corchetes)
     public static boolean estaBalanceada(String expresion) {
-        Stack<Character> pila = new Stack<>();
+        Stack<Character> pila = new Stack<>(); // Usamos una pila para manejar los símbolos de apertura
 
+        // Recorremos la expresión caracter por caracter
         for (int i = 0; i < expresion.length(); i++) {
             char caracter = expresion.charAt(i);
 
+            // Si el caracter es un símbolo de apertura, lo agregamos a la pila
             if (caracter == '(' || caracter == '{' || caracter == '[') {
                 pila.push(caracter);
-            } else if (caracter == ')' || caracter == '}' || caracter == ']') {
+            } 
+            // Si es un símbolo de cierre, verificamos si hay un símbolo correspondiente en la pila
+            else if (caracter == ')' || caracter == '}' || caracter == ']') {
                 if (pila.isEmpty()) {
-                    return false; // Paréntesis de cierre sin apertura correspondiente
+                    return false; // Si no hay símbolo de apertura, la expresión está desbalanceada
                 }
 
-                char tope = pila.pop();
+                char tope = pila.pop(); // Sacamos el último símbolo de apertura
+
+                // Verificamos que el símbolo de apertura y cierre correspondan
                 if ((caracter == ')' && tope != '(') ||
                     (caracter == '}' && tope != '{') ||
                     (caracter == ']' && tope != '[')) {
-                    return false;
+                    return false; // Si no coinciden, la expresión está desbalanceada
                 }
             }
         }
 
-        return pila.isEmpty(); // Si la pila está vacía, está balanceada
-    }
-
-    // Método para evaluar una expresión en notación postfija
-    public static int evaluarPostfija(String expresion) {
-        Stack<Integer> pila = new Stack<>();
-
-        for (int i = 0; i < expresion.length(); i++) {
-            char caracter = expresion.charAt(i);
-
-            if (Character.isDigit(caracter)) {
-                pila.push(Character.getNumericValue(caracter));
-            } else {
-                int operando2 = pila.pop();
-                int operando1 = pila.pop();
-
-                switch (caracter) {
-                    case '+':
-                        pila.push(operando1 + operando2);
-                        break;
-                    case '-':
-                        pila.push(operando1 - operando2);
-                        break;
-                    case '*':
-                        pila.push(operando1 * operando2);
-                        break;
-                    case '/':
-                        pila.push(operando1 / operando2);
-                        break;
-                }
-            }
-        }
-
-        return pila.pop(); // El último elemento es el resultado
+        // Si la pila está vacía al final, la expresión está completamente balanceada
+        return pila.isEmpty();
     }
 
     // Menú amigable para el usuario utilizando JOptionPane
     public static void main(String[] args) {
-        boolean salir = false;
+        boolean salir = false; // Controla si el programa continúa o no
 
         while (!salir) {
             // Mostrar menú con opciones
             String opcionStr = JOptionPane.showInputDialog(null, 
                 "Menú:\n1. Verificar si una expresión matemática está balanceada\n"
-                + "2. Evaluar una expresión matemática en notación postfija\n"
-                + "3. Salir\nElige una opción:", 
+                + "2. Salir\nElige una opción:", 
                 "Menú de Opciones", 
                 JOptionPane.QUESTION_MESSAGE);
 
+            // Si el usuario cancela el diálogo, salimos del bucle
             if (opcionStr == null) {
-                salir = true; // El usuario canceló o cerró el diálogo
+                salir = true;
                 break;
             }
 
             int opcion;
             try {
+                // Convertimos la opción a número
                 opcion = Integer.parseInt(opcionStr);
             } catch (NumberFormatException e) {
+                // Si la opción no es un número, mostramos un mensaje de error
                 JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, elige un número.", 
                     "Error", JOptionPane.ERROR_MESSAGE);
-                continue;
+                continue; // Volvemos a mostrar el menú
             }
 
             switch (opcion) {
@@ -98,6 +74,7 @@ public class ExpresionMatematica {
                         "Verificar Balanceo", 
                         JOptionPane.QUESTION_MESSAGE);
 
+                    // Si el usuario no cancela, verificamos la expresión ingresada
                     if (expresionBalanceada != null) {
                         if (estaBalanceada(expresionBalanceada)) {
                             JOptionPane.showMessageDialog(null, 
@@ -112,35 +89,15 @@ public class ExpresionMatematica {
                     break;
 
                 case 2:
-                    // Evaluar expresión en notación postfija
-                    String expresionPostfija = JOptionPane.showInputDialog(null, 
-                        "Ingresa la expresión matemática en notación postfija:", 
-                        "Evaluar Expresión Postfija", 
-                        JOptionPane.QUESTION_MESSAGE);
-
-                    if (expresionPostfija != null) {
-                        try {
-                            int resultado = evaluarPostfija(expresionPostfija);
-                            JOptionPane.showMessageDialog(null, 
-                                "El resultado de la expresión es: " + resultado, 
-                                "Resultado", JOptionPane.INFORMATION_MESSAGE);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, 
-                                "Error al evaluar la expresión. Asegúrate de ingresar una expresión postfija válida.", 
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                    break;
-
-                case 3:
-                    // Salir
+                    // Salir del programa
                     salir = true;
                     JOptionPane.showMessageDialog(null, 
-                        "Gracias por usar el programa.", 
+                        "Saliendo del programa...", 
                         "Salir", JOptionPane.INFORMATION_MESSAGE);
                     break;
 
                 default:
+                    // Si la opción no es válida, mostramos un mensaje de error
                     JOptionPane.showMessageDialog(null, 
                         "Opción no válida. Por favor, elige una opción correcta.", 
                         "Error", JOptionPane.ERROR_MESSAGE);
